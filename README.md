@@ -21,6 +21,7 @@ meant to run as a sidecar next to your Tautulli container.
 | `tautulli_bandwidth_wan_kbps` | gauge | Bandwidth used by WAN streams, in Kbps |
 | `tautulli_scrape_duration_seconds` | histogram | Time spent calling the Tautulli API per scrape |
 | `tautulli_scrape_errors_total` | counter | Total number of failed scrapes |
+| `session_bandwidth_kbps` | gauge | bandwidth by session |
 
 If a scrape fails, `tautulli_up` drops to 0 but the other gauges keep their
 last known value (the standard Prometheus exporter pattern) — always gate
