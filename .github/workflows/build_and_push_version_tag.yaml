@@ -1,4 +1,4 @@
-name: Build and Push Tautulli Exporter
+name: Build and Push Tautulli Exporter for Tag release
 
 on:
   push:
