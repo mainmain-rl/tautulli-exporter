@@ -1,13 +1,18 @@
-# tautulli-exporter
+# Tautulli Exporter (Go Version)
 
-A small Prometheus exporter for [Tautulli](https://tautulli.com/). It calls
-Tautulli's `get_activity` API and exposes current Plex streaming activity
-(stream counts by type, bandwidth usage) as Prometheus metrics.
+![alt text](images/tautulli_exporter_logo.png)
 
-Built with FastAPI + `prometheus_client`, packaged as a container image
-meant to run as a sidecar next to your Tautulli container.
+A Prometheus exporter for [Tautulli](https://tautulli.com/) written in Go. It calls Tautulli's `get_activity` API and exposes current Plex streaming activity (stream counts by type, bandwidth usage) as Prometheus metrics.
 
-## Metrics
+## Features
+
+- **Lightweight**: Written in Go for minimal resource usage
+- **Fast**: Efficient HTTP client and Prometheus metrics handling
+- **Container-friendly**: Easy to deploy in Docker/Kubernetes
+- **Health checks**: Built-in `/health` endpoint for monitoring
+- **Environment-based configuration**: All settings via environment variables
+
+## Metrics Exposed
 
 | Metric | Type | Description |
 |---|---|---|
@@ -21,16 +26,11 @@ meant to run as a sidecar next to your Tautulli container.
 | `tautulli_bandwidth_wan_kbps` | gauge | Bandwidth used by WAN streams, in Kbps |
 | `tautulli_scrape_duration_seconds` | histogram | Time spent calling the Tautulli API per scrape |
 | `tautulli_scrape_errors_total` | counter | Total number of failed scrapes |
-| `tautulli_session_bandwidth_kbps` | gauge | bandwidth by session |
-
-If a scrape fails, `tautulli_up` drops to 0 but the other gauges keep their
-last known value (the standard Prometheus exporter pattern) — always gate
-alerts/dashboards on `tautulli_up` alongside them.
+| `tautulli_session_bandwidth_kbps` | gauge | Bandwidth by session (one time series per active session) |
 
 ## Configuration
 
-All configuration is via environment variables. See [`.env.example`](.env.example)
-for the full list; the important ones:
+All configuration is via environment variables. See [`.env.example`](.env.example) for the full list:
 
 | Variable | Default | Description |
 |---|---|---|
@@ -38,26 +38,23 @@ for the full list; the important ones:
 | `TAUTULLI_APIKEY` | — | **Required.** Tautulli API key (Settings → Web Interface) |
 | `TAUTULLI_VERIFY_SSL` | `true` | Set to `false` for self-signed HTTPS |
 | `LISTEN_PORT` | `9105` | Port the exporter listens on |
+| `LISTEN_HOST` | `0.0.0.0` | Host the exporter binds to |
+| `LOG_LEVEL` | `info` | Logging level (debug, info, warn, error) |
 
-The process fails fast at startup if `TAUTULLI_APIKEY` is missing.
-
-## Running it
-
-**With Docker:**
+## Running with Docker
 
 ```bash
 docker run -p 9105:9105 \
   -e TAUTULLI_URL=http://tautulli:8181 \
   -e TAUTULLI_APIKEY=your-api-key \
-  ghcr.io/<your-org>/tautulli-exporter:latest
+  ghcr.io/romain/tautulli-exporter:v1
 ```
 
-**As a Kubernetes sidecar** (same pod as Tautulli, calling it over
-`127.0.0.1`):
+## Kubernetes Deployment (Sidecar)
 
 ```yaml
 - name: tautulli-exporter
-  image: ghcr.io/<your-org>/tautulli-exporter:latest
+  image: ghcr.io/romain/tautulli-exporter:latest
   ports:
     - name: metrics
       containerPort: 9105
@@ -75,5 +72,30 @@ docker run -p 9105:9105 \
     httpGet: { path: /health, port: 9105 }
 ```
 
-Then scrape `<service>:9105/metrics` from Prometheus as usual (e.g. via a
-`ScrapeConfig` / `PodMonitor` if you're using the Prometheus Operator).
+## Building and Running Locally
+
+```bash
+# Build the Go application
+go build -o tautulli-exporter .
+
+# Run with environment variables
+export TAUTULLI_APIKEY="your_api_key"
+./tautulli-exporter
+
+# Access metrics at http://localhost:9105/metrics
+```
+
+## Development
+
+The Go implementation maintains the same functionality as the original Python version:
+- Async HTTP client (using Go's concurrent model)
+- Prometheus metrics with the same names and help text
+- Health checks at `/health`
+- Root endpoint at `/`
+- Environment-based configuration
+- Graceful shutdown handling
+
+The main differences are:
+- **Performance**: Go's native concurrency and lower memory footprint
+- **Simplicity**: No external dependencies beyond Prometheus client library
+- **Deployment**: Smaller container images and faster startup times

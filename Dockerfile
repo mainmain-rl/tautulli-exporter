@@ -1,28 +1,40 @@
-FROM python:3.13-slim
+# Build stage
+FROM golang:1.25.6-alpine AS builder
 
 WORKDIR /app
 
-# Installation de uv pour une gestion rapide des dépendances
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+# Copy go.mod and go.sum
+COPY go.mod go.sum ./
 
-# Copier les fichiers de dépendances
-COPY pyproject.toml .
-COPY .python-version .
+# Download dependencies
+RUN go mod download
+RUN go mod verify
 
-# Installer les dépendances
-RUN uv sync --no-dev --frozen || uv sync --no-dev
+# Copy source code
+COPY internal/. internal/.
+COPY cmd/. cmd/.
 
-# Copier le code source
-COPY src/ src/
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o tautulli-exporter ./cmd/tautulli-exporter
 
-# Port exposé
+# Final stage
+FROM alpine:latest
+
+WORKDIR /app
+
+# Copy the binary from the builder stage
+COPY --from=builder /app/tautulli-exporter .
+
+# Expose the metrics port
 EXPOSE 9105
 
+# Health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD ["python", "-c", "import os, urllib.request; urllib.request.urlopen('http://127.0.0.1:' + os.environ.get('LISTEN_PORT', '9105') + '/health', timeout=3)"]
+    CMD wget -qO- http://127.0.0.1:9105/health
 
-ENV PYTHONPATH=/app/src
-ENV LISTEN_PORT=9105
-ENV LOG_LEVEL=info
+# Default environment variables
+ENV LISTEN_PORT=9105 \
+    LOG_LEVEL=info
 
-CMD ["sh", "-c", "exec uv run python -m uvicorn src.main:app --host 0.0.0.0 --port ${LISTEN_PORT} --log-level ${LOG_LEVEL}"]
+# Command to run the application
+CMD ["./tautulli-exporter"]
