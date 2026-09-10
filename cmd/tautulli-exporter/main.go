@@ -17,7 +17,7 @@ import (
 	"tautulli-exporter/internal/metrics"
 )
 
-var Version string = "2.0.0"
+var Version string = "2.0.1"
 
 // HealthCheckHandler handles health checks
 func HealthCheckHandler(c *gin.Context) {
