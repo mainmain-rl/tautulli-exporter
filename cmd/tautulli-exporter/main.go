@@ -56,6 +56,7 @@ func main() {
 	tautulliClient := client.NewTautulliClient(tautulliConfig)
 
 	// Set up Gin HTTP server
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
 	// Metrics endpoint
