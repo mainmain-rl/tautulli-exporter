@@ -1,0 +1,20 @@
+name: Go Test
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.6'
+          cache-dependency-path: go.sum
+      - name: Install dependencies
+        run: go install cmd/tautulli-exporter/main.go
+      - name: Build
+        run: go build -v ./...
+      - name: Test with the Go CLI
+        run: go test ./...
