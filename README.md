@@ -11,6 +11,7 @@ A Prometheus exporter for [Tautulli](https://tautulli.com/) written in Go. It ca
 - **Container-friendly**: Easy to deploy in Docker/Kubernetes
 - **Health checks**: Built-in `/health` endpoint for monitoring
 - **Environment-based configuration**: All settings via environment variables
+- **Grafana Dashboard**: A functional [Grafana Dashboard](grafana-dashboard.json)
 
 ## Metrics Exposed
 
