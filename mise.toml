@@ -1,2 +1,6 @@
 [tools]
 go = "1.25.6"
+pre-commit="4.6.2"
+golangci-lint = "2.14"
+gofumpt = "0.12"
+"github:rtk-ai/rtk" = "0.51.0"

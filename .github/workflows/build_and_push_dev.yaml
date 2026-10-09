@@ -1,7 +1,9 @@
-name: Build and Push Tautulli Exporter
+name: Build and Push on dev* branch
 
 on:
   push:
+    branches: [dev-*,dev/*]
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -46,7 +48,6 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=sha,prefix=,format=short
 
       - name: Build and push
         uses: docker/build-push-action@v6

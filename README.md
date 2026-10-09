@@ -48,14 +48,14 @@ All configuration is via environment variables. See [`.env.example`](.env.exampl
 docker run -p 9105:9105 \
   -e TAUTULLI_URL=http://tautulli:8181 \
   -e TAUTULLI_APIKEY=your-api-key \
-  ghcr.io/romain/tautulli-exporter:v1
+  ghcr.io/mainmain-rl/tautulli-exporter:latest
 ```
 
 ## Kubernetes Deployment (Sidecar)
 
 ```yaml
 - name: tautulli-exporter
-  image: ghcr.io/romain/tautulli-exporter:latest
+  image: ghcr.io/mainmain-rl/tautulli-exporter:latest
   ports:
     - name: metrics
       containerPort: 9105

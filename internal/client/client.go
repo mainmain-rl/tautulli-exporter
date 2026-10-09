@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -98,7 +97,7 @@ func (c *TautulliClient) GetActivity(ctx context.Context) (*TautulliActivity, er
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
@@ -119,25 +118,4 @@ func (c *TautulliClient) GetActivity(ctx context.Context) (*TautulliActivity, er
 	}
 
 	return &activity, nil
-}
-
-// asInt converts an interface{} value to int for testing purposes
-func asInt(value interface{}, defaultValue int) int {
-	if value == nil {
-		return defaultValue
-	}
-
-	switch v := value.(type) {
-	case int:
-		return v
-	case float64:
-		return int(v)
-	case string:
-		if parsed, err := strconv.Atoi(v); err == nil {
-			return parsed
-		}
-		return defaultValue
-	default:
-		return defaultValue
-	}
 }

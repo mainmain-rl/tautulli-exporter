@@ -79,7 +79,6 @@ func TestGetActivitySuccess(t *testing.T) {
 
 	client := NewTautulliClient(config)
 	activity, err := client.GetActivity(context.Background())
-
 	if err != nil {
 		t.Fatalf("Expected no error, got %v", err)
 	}
@@ -88,8 +87,8 @@ func TestGetActivitySuccess(t *testing.T) {
 		t.Fatal("Expected non-nil activity")
 	}
 
-	if asInt(activity.StreamCount, 0) != 2 {
-		t.Errorf("Expected stream count 2, got %v", asInt(activity.StreamCount, 0))
+	if streamCount, ok := activity.StreamCount.(float64); !ok || streamCount != 2 {
+		t.Errorf("Expected stream count 2, got %v", activity.StreamCount)
 	}
 
 	if len(activity.Sessions) != 1 {
