@@ -1,8 +1,9 @@
 package metrics
 
 import (
-	"tautulli-exporter/internal/client"
 	"testing"
+
+	"tautulli-exporter/internal/client"
 )
 
 func TestAsFloat64(t *testing.T) {
