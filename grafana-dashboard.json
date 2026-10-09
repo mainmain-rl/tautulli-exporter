@@ -626,6 +626,590 @@
         }
       }
     },
+    "panel-19": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "${datasource}"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "expr": "tautulli_history_total_plays",
+                      "format": "time_series",
+                      "instant": true
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 19,
+        "links": [],
+        "title": "Total plays (history)",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-20": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "${datasource}"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "expr": "tautulli_history_duration_seconds / 3600",
+                      "format": "time_series",
+                      "instant": true
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 20,
+        "links": [],
+        "title": "Total watch time (hours)",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-21": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "${datasource}"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "expr": "tautulli_history_users_total",
+                      "format": "time_series",
+                      "instant": true
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 21,
+        "links": [],
+        "title": "Unique users (history)",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-22": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "${datasource}"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "expr": "tautulli_history_platforms_total",
+                      "format": "time_series",
+                      "instant": true
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 22,
+        "links": [],
+        "title": "Unique platforms (history)",
+        "vizConfig": {
+          "group": "stat",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "thresholds"
+                },
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "colorMode": "value",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "percentChangeColorMode": "standard",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showPercentChange": false,
+              "textMode": "auto",
+              "wideLayout": true
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-23": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "${datasource}"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "expr": "tautulli_stream_count_by_media_type",
+                      "format": "time_series",
+                      "instant": true
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 23,
+        "links": [],
+        "title": "Active streams by media type",
+        "vizConfig": {
+          "group": "bargauge",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-BlPu"
+                },
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "displayMode": "gradient",
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": false
+              },
+              "maxVizHeight": 300,
+              "minVizHeight": 16,
+              "minVizWidth": 8,
+              "namePlacement": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showUnfilled": true,
+              "sizing": "auto",
+              "valueMode": "color"
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-24": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "${datasource}"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "expr": "tautulli_stream_count_by_player",
+                      "format": "time_series",
+                      "instant": true
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 24,
+        "links": [],
+        "title": "Active streams by player",
+        "vizConfig": {
+          "group": "bargauge",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-BlPu"
+                },
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "displayMode": "gradient",
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": false
+              },
+              "maxVizHeight": 300,
+              "minVizHeight": 16,
+              "minVizWidth": 8,
+              "namePlacement": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showUnfilled": true,
+              "sizing": "auto",
+              "valueMode": "color"
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
+    "panel-25": {
+      "kind": "Panel",
+      "spec": {
+        "data": {
+          "kind": "QueryGroup",
+          "spec": {
+            "queries": [
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "${datasource}"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "expr": "tautulli_stream_count_by_platform",
+                      "format": "time_series",
+                      "instant": true
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "A"
+                }
+              }
+            ],
+            "queryOptions": {},
+            "transformations": []
+          }
+        },
+        "description": "",
+        "id": 25,
+        "links": [],
+        "title": "Active streams by platform",
+        "vizConfig": {
+          "group": "bargauge",
+          "kind": "VizConfig",
+          "spec": {
+            "fieldConfig": {
+              "defaults": {
+                "color": {
+                  "mode": "continuous-BlPu"
+                },
+                "min": 0,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "blue",
+                      "value": 0
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "options": {
+              "displayMode": "gradient",
+              "legend": {
+                "calcs": [],
+                "displayMode": "list",
+                "placement": "bottom",
+                "showLegend": false
+              },
+              "maxVizHeight": 300,
+              "minVizHeight": 16,
+              "minVizWidth": 8,
+              "namePlacement": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              },
+              "showUnfilled": true,
+              "sizing": "auto",
+              "valueMode": "color"
+            }
+          },
+          "version": "13.0.1"
+        }
+      }
+    },
     "panel-17": {
       "kind": "Panel",
       "spec": {
@@ -1544,138 +2128,6 @@
                     "spec": {
                       "element": {
                         "kind": "ElementReference",
-                        "name": "panel-2"
-                      },
-                      "height": 4,
-                      "width": 4,
-                      "x": 0,
-                      "y": 0
-                    }
-                  },
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
-                        "name": "panel-3"
-                      },
-                      "height": 4,
-                      "width": 4,
-                      "x": 4,
-                      "y": 0
-                    }
-                  },
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
-                        "name": "panel-4"
-                      },
-                      "height": 4,
-                      "width": 4,
-                      "x": 8,
-                      "y": 0
-                    }
-                  },
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
-                        "name": "panel-5"
-                      },
-                      "height": 4,
-                      "width": 4,
-                      "x": 12,
-                      "y": 0
-                    }
-                  },
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
-                        "name": "panel-6"
-                      },
-                      "height": 4,
-                      "width": 4,
-                      "x": 16,
-                      "y": 0
-                    }
-                  },
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
-                        "name": "panel-7"
-                      },
-                      "height": 4,
-                      "width": 4,
-                      "x": 20,
-                      "y": 0
-                    }
-                  }
-                ]
-              }
-            },
-            "title": "Overview"
-          }
-        },
-        {
-          "kind": "RowsLayoutRow",
-          "spec": {
-            "collapse": false,
-            "layout": {
-              "kind": "GridLayout",
-              "spec": {
-                "items": [
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
-                        "name": "panel-9"
-                      },
-                      "height": 8,
-                      "width": 12,
-                      "x": 0,
-                      "y": 0
-                    }
-                  },
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
-                        "name": "panel-10"
-                      },
-                      "height": 8,
-                      "width": 12,
-                      "x": 12,
-                      "y": 0
-                    }
-                  }
-                ]
-              }
-            },
-            "title": "Streams & bandwidth over time"
-          }
-        },
-        {
-          "kind": "RowsLayoutRow",
-          "spec": {
-            "collapse": false,
-            "layout": {
-              "kind": "GridLayout",
-              "spec": {
-                "items": [
-                  {
-                    "kind": "GridLayoutItem",
-                    "spec": {
-                      "element": {
-                        "kind": "ElementReference",
                         "name": "panel-12"
                       },
                       "height": 8,
@@ -1727,6 +2179,125 @@
               }
             },
             "title": "Who's streaming"
+          }
+        },
+        {
+          "kind": "RowsLayoutRow",
+          "spec": {
+            "collapse": false,
+            "layout": {
+              "kind": "GridLayout",
+              "spec": {
+                "items": [
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-19"
+                      },
+                      "height": 4,
+                      "width": 6,
+                      "x": 0,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-20"
+                      },
+                      "height": 4,
+                      "width": 6,
+                      "x": 6,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-21"
+                      },
+                      "height": 4,
+                      "width": 6,
+                      "x": 12,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-22"
+                      },
+                      "height": 4,
+                      "width": 6,
+                      "x": 18,
+                      "y": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "title": "Historical playback"
+          }
+        },
+        {
+          "kind": "RowsLayoutRow",
+          "spec": {
+            "collapse": false,
+            "layout": {
+              "kind": "GridLayout",
+              "spec": {
+                "items": [
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-23"
+                      },
+                      "height": 8,
+                      "width": 8,
+                      "x": 0,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-24"
+                      },
+                      "height": 8,
+                      "width": 8,
+                      "x": 8,
+                      "y": 0
+                    }
+                  },
+                  {
+                    "kind": "GridLayoutItem",
+                    "spec": {
+                      "element": {
+                        "kind": "ElementReference",
+                        "name": "panel-25"
+                      },
+                      "height": 8,
+                      "width": 8,
+                      "x": 16,
+                      "y": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "title": "Stream breakdowns"
           }
         },
         {
