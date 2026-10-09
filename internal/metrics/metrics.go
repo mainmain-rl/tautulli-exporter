@@ -28,6 +28,16 @@ const (
 	MetricScrapeDuration          = "tautulli_scrape_duration_seconds"
 	MetricScrapeErrorsTotal       = "tautulli_scrape_errors_total"
 	MetricSessionBandwidthKbps    = "tautulli_session_bandwidth_kbps"
+	MetricHistoryTotalPlays       = "tautulli_history_total_plays"
+	MetricHistoryDurationSeconds  = "tautulli_history_duration_seconds"
+	MetricHistoryUsersTotal       = "tautulli_history_users_total"
+	MetricHistoryPlatformsTotal   = "tautulli_history_platforms_total"
+	MetricSessionDurationSeconds  = "tautulli_session_duration_seconds"
+	MetricSessionBytesTotal       = "tautulli_session_bytes_total"
+	MetricMediaTypeStreamCount    = "tautulli_stream_count_by_media_type"
+	MetricMediaTypeBandwidthKbps  = "tautulli_bandwidth_by_media_type_kbps"
+	MetricPlayerStreamCount       = "tautulli_stream_count_by_player"
+	MetricPlatformStreamCount     = "tautulli_stream_count_by_platform"
 )
 
 // Metrics holds all Prometheus metrics
@@ -86,6 +96,61 @@ var (
 		Name: MetricSessionBandwidthKbps,
 		Help: "Live bandwidth of a single active stream, in Kbps. One time series per currently active session; use `sum by (user)`, `sum by (transcode_decision)`, etc. to break it down.",
 	}, []string{"session_key", "user", "player", "product", "platform", "transcode_decision", "state", "location", "media_type", "title", "ip_address"})
+
+	sessionDurationSeconds = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: MetricSessionDurationSeconds,
+		Help: "Duration of a single active stream, in seconds. One time series per currently active session.",
+	}, []string{"session_key", "user", "player", "product", "platform", "transcode_decision", "state", "location", "media_type", "title", "ip_address"})
+
+	sessionBytesTotal = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: MetricSessionBytesTotal,
+		Help: "Total bytes transferred for a single active stream. One time series per currently active session.",
+	}, []string{"session_key", "user", "player", "product", "platform", "transcode_decision", "state", "location", "media_type", "title", "ip_address"})
+
+	// Media type breakdowns
+	mediaTypeStreamCount = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: MetricMediaTypeStreamCount,
+		Help: "Number of active streams broken down by media type.",
+	}, []string{"media_type"})
+
+	mediaTypeBandwidthKbps = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: MetricMediaTypeBandwidthKbps,
+		Help: "Bandwidth broken down by media type, in Kbps.",
+	}, []string{"media_type"})
+
+	// Player/platform breakdowns
+	playerStreamCount = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: MetricPlayerStreamCount,
+		Help: "Number of active streams broken down by player.",
+	}, []string{"player"})
+
+	platformStreamCount = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: MetricPlatformStreamCount,
+		Help: "Number of active streams broken down by platform.",
+	}, []string{"platform"})
+)
+
+// Historical metrics
+var (
+	historyTotalPlays = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: MetricHistoryTotalPlays,
+		Help: "Total number of plays from Tautulli playback history.",
+	})
+
+	historyDurationSeconds = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: MetricHistoryDurationSeconds,
+		Help: "Total duration of playback from Tautulli history, in seconds.",
+	})
+
+	historyUsersTotal = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: MetricHistoryUsersTotal,
+		Help: "Total number of unique users from Tautulli history.",
+	})
+
+	historyPlatformsTotal = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: MetricHistoryPlatformsTotal,
+		Help: "Total number of unique platforms from Tautulli history.",
+	})
 )
 
 // init registers metrics with Prometheus
@@ -101,6 +166,16 @@ func init() {
 	prometheus.MustRegister(scrapeDurationSeconds)
 	prometheus.MustRegister(scrapeErrorsTotal)
 	prometheus.MustRegister(sessionBandwidthKbps)
+	prometheus.MustRegister(sessionDurationSeconds)
+	prometheus.MustRegister(sessionBytesTotal)
+	prometheus.MustRegister(historyTotalPlays)
+	prometheus.MustRegister(historyDurationSeconds)
+	prometheus.MustRegister(historyUsersTotal)
+	prometheus.MustRegister(historyPlatformsTotal)
+	prometheus.MustRegister(mediaTypeStreamCount)
+	prometheus.MustRegister(mediaTypeBandwidthKbps)
+	prometheus.MustRegister(playerStreamCount)
+	prometheus.MustRegister(platformStreamCount)
 }
 
 // asFloat64 converts various types to float64 with a default
@@ -233,11 +308,97 @@ func RefreshMetrics(client *client.TautulliClient) {
 
 	// Refresh session metrics
 	sessionBandwidthKbps.Reset()
+	sessionDurationSeconds.Reset()
+	sessionBytesTotal.Reset()
+	mediaTypeStreamCount.Reset()
+	mediaTypeBandwidthKbps.Reset()
+	playerStreamCount.Reset()
+	platformStreamCount.Reset()
+
+	// Count streams and bandwidth by media type, player, and platform
+	mediaTypeCounts := make(map[string]int)
+	mediaTypeBandwidth := make(map[string]int)
+	playerCounts := make(map[string]int)
+	platformCounts := make(map[string]int)
+
 	for _, session := range activity.Sessions {
 		labels := sessionLabels(session)
 		bandwidth := asInt(session.Bandwidth, 0)
+		sessionDuration := asInt(session.Duration, 0)
+		sessionBytes := asInt(session.BytesTransferred, 0)
+		mediaType := session.MediaType
+		player := session.Player
+		platform := session.Platform
+
 		sessionBandwidthKbps.With(labels).Set(float64(bandwidth))
+		sessionDurationSeconds.With(labels).Set(float64(sessionDuration))
+		sessionBytesTotal.With(labels).Set(float64(sessionBytes))
+
+		// Accumulate media type counts and bandwidth
+		mediaTypeCounts[mediaType]++
+		mediaTypeBandwidth[mediaType] += bandwidth
+
+		// Accumulate player and platform counts
+		playerCounts[player]++
+		platformCounts[platform]++
 	}
+
+	// Set media type breakdown metrics
+	for mediaType, count := range mediaTypeCounts {
+		mediaTypeStreamCount.WithLabelValues(mediaType).Set(float64(count))
+		mediaTypeBandwidthKbps.WithLabelValues(mediaType).Set(float64(mediaTypeBandwidth[mediaType]) / 1000.0)
+	}
+
+	// Set player breakdown metrics
+	for player, count := range playerCounts {
+		playerStreamCount.WithLabelValues(player).Set(float64(count))
+	}
+
+	// Set platform breakdown metrics
+	for platform, count := range platformCounts {
+		platformStreamCount.WithLabelValues(platform).Set(float64(count))
+	}
+
+	// Refresh historical metrics
+	RefreshHistoryMetrics(client)
+}
+
+// RefreshHistoryMetrics updates historical activity metrics from Tautulli
+func RefreshHistoryMetrics(client *client.TautulliClient) {
+	// Only fetch history if enabled
+	if !client.IsHistoryEnabled() {
+		return
+	}
+
+	stats, err := client.GetHistoryStats(context.Background())
+	if err != nil {
+		log.Printf("Failed to fetch history stats from Tautulli: %v", err)
+		historyTotalPlays.Set(0)
+		historyDurationSeconds.Set(0)
+		historyUsersTotal.Set(0)
+		historyPlatformsTotal.Set(0)
+		return
+	}
+
+	// Set total plays
+	historyTotalPlays.Set(float64(stats.TotalPlays))
+
+	// Set total duration
+	historyDurationSeconds.Set(stats.TotalDuration)
+
+	// Set unique users count
+	userCount := 0
+	if stats.Users != nil {
+		userCount = len(stats.Users)
+	}
+	historyUsersTotal.Set(float64(userCount))
+
+	// Set unique platforms count
+	platformCount := 0
+	if stats.Platforms != nil {
+		platformCount = len(stats.Platforms)
+	}
+	historyPlatformsTotal.Set(float64(platformCount))
 }
 
 // MetricsHandler handles metrics requests
