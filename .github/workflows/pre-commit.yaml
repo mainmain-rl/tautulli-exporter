@@ -1,0 +1,27 @@
+name: Pre-commit Checks
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  pre-commit:
+    name: Run pre-commit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Code checkout
+        uses: actions/checkout@v6
+
+      - name: 🧰 Tools installation with mise
+        uses: jdx/mise-action@v4
+
+      - name: 💾 Caching for pre-commit
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ runner.os }}-${{ hashFiles('mise.toml', '.pre-commit-config.yaml') }}
+
+      - name: 🚀 pre-commit execution
+        run: pre-commit run --all-files --show-diff-on-failure --color=always
