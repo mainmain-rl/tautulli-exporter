@@ -3,6 +3,7 @@ module tautulli-exporter
 go 1.25.6
 
 require (
+	github.com/allure-framework/allure-go/commons v1.3.1
 	github.com/gin-gonic/gin v1.9.1
 	github.com/prometheus/client_golang v1.24.1
 )

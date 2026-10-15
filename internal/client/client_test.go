@@ -7,9 +7,21 @@ import (
 	"net/http/httptest"
 	"testing"
 	"time"
+
+	allure "github.com/allure-framework/allure-go/commons/gotest"
 )
 
+func withAllure(t *testing.T, test func(*testing.T)) {
+	allure.Wrap(t, func(a *allure.Context) {
+		test(a.T())
+	})
+}
+
 func TestNewTautulliClient(t *testing.T) {
+	withAllure(t, testNewTautulliClient)
+}
+
+func testNewTautulliClient(t *testing.T) {
 	config := Config{
 		TautulliURL:       "http://localhost:8181",
 		TautulliAPIKey:    "test-key",
@@ -33,6 +45,10 @@ func TestNewTautulliClient(t *testing.T) {
 }
 
 func TestGetActivitySuccess(t *testing.T) {
+	withAllure(t, testGetActivitySuccess)
+}
+
+func testGetActivitySuccess(t *testing.T) {
 	// Create a test server that returns successful response
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		response := map[string]interface{}{
@@ -101,6 +117,10 @@ func TestGetActivitySuccess(t *testing.T) {
 }
 
 func TestGetActivityError(t *testing.T) {
+	withAllure(t, testGetActivityError)
+}
+
+func testGetActivityError(t *testing.T) {
 	// Create a test server that returns error response
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		response := map[string]interface{}{
@@ -140,6 +160,10 @@ func TestGetActivityError(t *testing.T) {
 }
 
 func TestGetActivityTimeout(t *testing.T) {
+	withAllure(t, testGetActivityTimeout)
+}
+
+func testGetActivityTimeout(t *testing.T) {
 	// Create a test server that times out
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		time.Sleep(10 * time.Second) // Longer than our timeout
