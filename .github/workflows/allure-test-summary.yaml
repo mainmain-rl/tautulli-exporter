@@ -1,0 +1,63 @@
+name: Allure Test Summary
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install Allure Report
+        run: npm install --global allure
+
+      - name: Run tests
+        id: tests
+        continue-on-error: true
+        env:
+          ALLURE_RESULTS_DIR: ${{ github.workspace }}/allure-results
+        run: go test ./...
+
+      - name: Generate Allure report
+        id: report
+        if: always()
+        run: allure generate ./allure-results --output ./allure-report
+
+      - name: Comment Allure summary
+        if: >-
+          always() &&
+          steps.report.outcome == 'success' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        uses: allure-framework/allure-action@v0.11.0
+        with:
+          report-directory: ./allure-report
+          github-token: ${{ github.token }}
+
+      - name: Fail if tests failed
+        if: always()
+        env:
+          TEST_OUTCOME: ${{ steps.tests.outcome }}
+        run: |
+          if [ "$TEST_OUTCOME" != "success" ]; then
+            echo "Go tests failed"
+            exit 1
+          fi

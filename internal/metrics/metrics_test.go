@@ -4,9 +4,21 @@ import (
 	"testing"
 
 	"tautulli-exporter/internal/client"
+
+	allure "github.com/allure-framework/allure-go/commons/gotest"
 )
 
+func withAllure(t *testing.T, test func(*testing.T)) {
+	allure.Wrap(t, func(a *allure.Context) {
+		test(a.T())
+	})
+}
+
 func TestAsFloat64(t *testing.T) {
+	withAllure(t, testAsFloat64)
+}
+
+func testAsFloat64(t *testing.T) {
 	tests := []struct {
 		name         string
 		value        interface{}
@@ -32,6 +44,10 @@ func TestAsFloat64(t *testing.T) {
 }
 
 func TestAsInt(t *testing.T) {
+	withAllure(t, testAsInt)
+}
+
+func testAsInt(t *testing.T) {
 	tests := []struct {
 		name         string
 		value        interface{}
@@ -57,6 +73,10 @@ func TestAsInt(t *testing.T) {
 }
 
 func TestNormalizeTranscodeDecision(t *testing.T) {
+	withAllure(t, testNormalizeTranscodeDecision)
+}
+
+func testNormalizeTranscodeDecision(t *testing.T) {
 	tests := []struct {
 		name     string
 		value    interface{}
@@ -82,6 +102,10 @@ func TestNormalizeTranscodeDecision(t *testing.T) {
 }
 
 func TestSessionTitle(t *testing.T) {
+	withAllure(t, testSessionTitle)
+}
+
+func testSessionTitle(t *testing.T) {
 	tests := []struct {
 		name     string
 		session  client.Session
@@ -124,6 +148,10 @@ func TestSessionTitle(t *testing.T) {
 }
 
 func TestSessionLabels(t *testing.T) {
+	withAllure(t, testSessionLabels)
+}
+
+func testSessionLabels(t *testing.T) {
 	session := client.Session{
 		SessionKey:        123,
 		User:              "testuser",
