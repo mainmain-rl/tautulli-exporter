@@ -1,4 +1,4 @@
-name: Build and Push on dev* branch
+name: Dev release
 
 on:
   push:
