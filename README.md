@@ -2,6 +2,8 @@
 
 ![alt text](images/tautulli_exporter_logo.png)
 
+[![Pre-commit Checks](https://github.com/mainmain-rl/tautulli-exporter/actions/workflows/pre-commit.yaml/badge.svg)](https://github.com/mainmain-rl/tautulli-exporter/actions/workflows/pre-commit.yaml)[![Tag release](https://github.com/mainmain-rl/tautulli-exporter/actions/workflows/build_and_push_tag.yaml/badge.svg)](https://github.com/mainmain-rl/tautulli-exporter/actions/workflows/build_and_push_tag.yaml)[![Dev release](https://github.com/mainmain-rl/tautulli-exporter/actions/workflows/build_and_push_dev.yaml/badge.svg)](https://github.com/mainmain-rl/tautulli-exporter/actions/workflows/build_and_push_dev.yaml)
+
 A Prometheus exporter for [Tautulli](https://tautulli.com/) written in Go. It calls Tautulli's `get_activity` API and exposes current Plex streaming activity (stream counts by type, bandwidth usage) as Prometheus metrics.
 
 ## Features
